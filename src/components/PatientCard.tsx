@@ -7,54 +7,67 @@ interface PatientCardProps {
 
 export default function PatientCard({ patient }: PatientCardProps) {
   const contact = patient.contact[0];
+  
+  // Cycle through p1.png, p2.png, p3.png based on patient_id for variety
+  const avatarIndex = (patient.patient_id % 3) + 1;
+  const localAvatar = `/p${avatarIndex}.png`;
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-slate-100 card-shadow relative group hover:border-primary/30 transition-all flex flex-col h-full ring-1 ring-slate-100/50">
-      <div className="flex items-start justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-slate-100 overflow-hidden ring-2 ring-slate-50 shadow-sm border border-slate-100">
-             {patient.photo_url ? (
-               <img src={patient.photo_url} alt={patient.patient_name} className="w-full h-full object-cover" />
-             ) : (
-               <div className="w-full h-full flex items-center justify-center text-slate-300 font-bold text-xl">
-                 {patient.patient_name[0]}
-               </div>
-             )}
+    <div className="bg-white rounded-[24px] overflow-hidden border border-slate-200 card-shadow transition-all flex flex-col h-full shadow-md hover:border-primary/40">
+      {/* High-Resolution Header Section */}
+      <div className="bg-[#e7f3ff] p-6 flex items-center justify-between">
+        <div className="flex items-center gap-5">
+          <div className="w-[85px] h-[85px] rounded-full bg-white overflow-hidden border border-slate-100 shadow-sm shrink-0">
+             <img 
+               src={patient.photo_url || localAvatar} 
+               alt={patient.patient_name} 
+               className="w-full h-full object-cover" 
+               onError={(e) => {
+                 (e.target as HTMLImageElement).src = localAvatar;
+               }}
+             />
           </div>
-          <div>
-            <h3 className="font-bold text-slate-800 text-base leading-tight group-hover:text-primary transition-colors tracking-tight">{patient.patient_name}</h3>
-            <p className="text-[11px] text-slate-400 font-bold mt-1 tracking-wider">ID-{String(patient.patient_id).padStart(4, '0')}</p>
+          <div className="flex flex-col">
+            <h3 className="font-extrabold text-[#334155] text-[20px] leading-tight tracking-tight">
+              {patient.patient_name}
+            </h3>
+            <p className="text-[15px] text-slate-500 font-bold mt-1 tracking-tight">
+              ID-{String(patient.patient_id).padStart(4, '0')}
+            </p>
           </div>
         </div>
-        <div className="bg-primary text-white text-[10px] font-bold px-2.5 py-1.5 rounded-md shadow-sm">
-          Age: {patient.age}
+        <div className="bg-[#3b82f6] text-white text-[13px] font-bold px-5 py-2.5 rounded-full self-center">
+          Age:{patient.age}
         </div>
       </div>
 
-      <div className="mb-6">
-        <span className={`badge badge-${patient.medical_issue.toLowerCase().replace(/ /g, '-')}`}>
-          {patient.medical_issue}
-        </span>
-      </div>
+      {/* High-Resolution Card Body */}
+      <div className="p-6 flex flex-col flex-1">
+        <div className="mb-6">
+          <span className={`badge badge-${patient.medical_issue.toLowerCase().replace(/ /g, '-')} !text-[14px] !py-1.5 !px-4 !rounded-[6px] border border-current opacity-90`}>
+            {patient.medical_issue}
+          </span>
+        </div>
 
-      <div className="space-y-4 mt-auto border-t border-slate-50 pt-5">
-        <div className="flex items-start gap-3">
-          <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-          <span className="text-[13px] text-slate-600 font-medium leading-relaxed">
-            {contact?.address || <span className="text-red-400/80">N/A</span>}
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Phone className="w-4 h-4 text-primary shrink-0" />
-          <span className="text-[13px] text-slate-600 font-semibold tracking-tight">
-            {contact?.number || <span className="text-red-400/80">N/A</span>}
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Mail className="w-4 h-4 text-primary shrink-0" />
-          <span className="text-[13px] text-slate-600 font-medium truncate">
-            {contact?.email || <span className="text-red-400/80">N/A</span>}
-          </span>
+        <div className="space-y-6 mt-2">
+          <div className="flex items-start gap-4">
+            <MapPin className="w-6 h-6 text-[#949494] shrink-0" />
+            <span className="text-[18px] text-[#334155] font-semibold leading-relaxed">
+              {contact?.address || <span className="text-red-400/80">N/A</span>}
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Phone className="w-6 h-6 text-[#949494] shrink-0" />
+            <span className="text-[18px] text-[#334155] font-semibold">
+              {contact?.number || <span className="text-red-400/80">N/A</span>}
+            </span>
+          </div>
+          <div className="flex items-start gap-4">
+            <Mail className="w-6 h-6 text-[#949494] shrink-0" />
+            <span className="text-[18px] text-[#334155] font-semibold truncate">
+              {contact?.email || <span className="text-red-400/80">N/A</span>}
+            </span>
+          </div>
         </div>
       </div>
     </div>

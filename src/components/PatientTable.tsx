@@ -48,13 +48,14 @@ export default function PatientTable({ patients, loading }: PatientTableProps) {
               <td className="px-5 py-3 whitespace-nowrap">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-slate-100 overflow-hidden border border-slate-100 shadow-sm shrink-0">
-                    {patient.photo_url ? (
-                      <img src={patient.photo_url} alt={patient.patient_name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-300 font-bold text-base">
-                        {patient.patient_name[0]}
-                      </div>
-                    )}
+                    <img 
+                      src={patient.photo_url || `/p${(patient.patient_id % 3) + 1}.png`} 
+                      alt={patient.patient_name} 
+                      className="w-full h-full object-cover" 
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `/p${(patient.patient_id % 3) + 1}.png`;
+                      }}
+                    />
                   </div>
                   <span className="font-semibold text-slate-800 tracking-tight">{patient.patient_name}</span>
                 </div>
