@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #1e293b;
-  --primary: #2563eb;
+  --background: #ffffff;
+  --foreground: #334155;
+  --primary: #3b82f6;
   --primary-foreground: #ffffff;
+  --header-blue: #3b82f6;
+  --table-header-text: #3b82f6;
 }
 
 @theme inline {
@@ -12,36 +14,61 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-header-blue: var(--header-blue);
+  --font-sans: var(--font-manrope);
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-manrope), sans-serif;
+  letter-spacing: -0.01em;
 }
 
 /* Custom Utilities */
-.header-pattern {
-  background-color: #2563eb;
-  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.15) 1px, transparent 0);
-  background-size: 24px 24px;
+.header-bg {
+  background-color: var(--header-blue);
+  background-image: url('/plus.png');
+  background-position: calc(200% + 250px) center;
+  background-repeat: no-repeat;
+  background-size: auto 140%;
 }
 
 .card-shadow {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+.search-input-shadow {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.border-dotted-l {
+  border-left: 1px dotted #cbd5e1;
+}
+
+.border-dotted-r {
+  border-right: 1px dotted #cbd5e1;
 }
 
 .badge {
-  @apply px-2 py-0.5 rounded-full text-xs font-semibold;
+  @apply px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider;
 }
 
-.badge-fever { @apply bg-red-100 text-red-700; }
-.badge-headache { @apply bg-orange-100 text-orange-700; }
-.badge-sore-throat { @apply bg-yellow-100 text-yellow-700; }
-.badge-sprained-ankle { @apply bg-green-100 text-green-700; }
-.badge-rash { @apply bg-pink-100 text-pink-700; }
-.badge-sinusitis { @apply bg-purple-100 text-purple-700; }
-.badge-ear-infection { @apply bg-cyan-100 text-cyan-700; }
-.badge-broken-arm { @apply bg-slate-100 text-slate-700; }
-.badge-stomach-ache { @apply bg-indigo-100 text-indigo-700; }
-.badge-allergic-reaction { @apply bg-amber-100 text-amber-700; }
+.badge-fever { @apply bg-red-100 text-red-600; }
+.badge-headache { @apply bg-orange-100 text-orange-600; }
+.badge-sore-throat { @apply bg-yellow-100 text-yellow-600; }
+.badge-sprained-ankle { @apply bg-emerald-100 text-emerald-600; }
+.badge-rash { @apply bg-pink-100 text-pink-600; }
+.badge-sinusitis { @apply bg-slate-100 text-slate-600; }
+.badge-ear-infection { @apply bg-blue-100 text-blue-600; }
+.badge-broken-arm { @apply bg-indigo-100 text-indigo-600; }
+.badge-stomach-ache { @apply bg-violet-100 text-violet-600; }
+.badge-allergic-reaction { @apply bg-amber-100 text-amber-600; }
+
+.tab-active {
+  @apply border-b-2 border-primary text-primary font-bold;
+}
+
+.filter-chip {
+  @apply flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-md text-xs font-medium text-slate-600 hover:border-slate-300 transition-all;
+}

@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Search, Filter, LayoutGrid, List, ChevronLeft, ChevronRight, ArrowUpDown, Download, X } from "lucide-react";
+import { Search, ListFilter, Download, X } from "lucide-react";
 import { Patient, ApiResponse } from "@/types/patient";
 import PatientTable from "./PatientTable";
 import PatientCard from "./PatientCard";
 
 const MEDICAL_ISSUES = [
-  "Fever", "Headache", "Sore throat", "Sprained ankle", "Rash", 
-  "Sinusitis", "Ear infection", "Broken arm", "Stomach ache", "Allergic reaction"
+  "Option 1", "Option 2", "Option 3", "Option 4", "Option 5", 
+  "Option 6", "Option 7", "Option 8", "Option 9", "Option 10"
 ];
 
 export default function PatientDirectory() {
@@ -69,154 +69,139 @@ export default function PatientDirectory() {
     setPage(1);
   };
 
-  const clearFilters = () => {
-    setSelectedIssues([]);
-    setSearch("");
-    setPage(1);
-  };
 
   return (
-    <div className="min-h-screen pb-20">
-      {/* Blue Header */}
-      <header className="header-pattern pt-12 pb-24 px-6 md:px-12 text-white">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold mb-1">Patient Directory</h1>
-          <p className="text-blue-100/80 font-medium">{total} Patient Found</p>
+    <div className="min-h-screen bg-white">
+      {/* Blue Header with Asset */}
+      <header className="header-bg pt-8 pb-14 px-6 md:px-12 text-white overflow-hidden relative">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <h1 className="text-4xl font-semibold mb-2 tracking-tight">Patient Directory</h1>
+          <p className="text-white/90 text-lg font-normal mb-0 leading-tight">{total} Patient Found</p>
         </div>
       </header>
 
-      {/* Main Content (Negative margin to overlap header) */}
-      <main className="max-w-7xl mx-auto px-6 md:px-12 -mt-12">
-        <div className="bg-white/60 dark:bg-slate-900/40 backdrop-blur-sm rounded-xl p-1 mb-6 border border-white/20">
-            <div className="flex items-center gap-1">
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-6 md:px-12 pt-8">
+        
+        {/* Top Control Bar (Tabs and Active Filters) */}
+        <div className="flex items-center justify-between mb-0 border-b border-slate-200">
+            <div className="flex items-center gap-6">
                 <button 
                     onClick={() => setViewMode('table')}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-all ${viewMode === 'table' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}
+                    className={`pb-3 text-[13px] font-bold transition-all px-1 cursor-pointer relative ${viewMode === 'table' ? 'text-slate-900 after:content-[""] after:absolute after:bottom-[-1px] after:left-0 after:w-full after:h-[2px] after:bg-primary' : 'text-slate-400 hover:text-slate-700'}`}
                 >
-                    <List className="w-4 h-4" />
                     Table View
                 </button>
                 <button 
                     onClick={() => setViewMode('card')}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-all ${viewMode === 'card' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}
+                    className={`pb-3 text-[13px] font-bold transition-all px-1 cursor-pointer relative ${viewMode === 'card' ? 'text-slate-900 after:content-[""] after:absolute after:bottom-[-1px] after:left-0 after:w-full after:h-[2px] after:bg-primary' : 'text-slate-400 hover:text-slate-700'}`}
                 >
-                    <LayoutGrid className="w-4 h-4" />
                     Card View
                 </button>
-                <div className="ml-auto pr-4 hidden md:flex items-center gap-2 text-slate-400">
-                    <Filter className="w-4 h-4" />
-                    <span className="text-xs font-bold uppercase tracking-wider">Active Filters: {selectedIssues.length + (search ? 1 : 0)}</span>
+            </div>
+            <div className="pb-3 flex items-center gap-2">
+                <ListFilter className="w-4 h-4 text-primary" />
+                <span className="text-[13px] font-medium text-slate-500">Active Filters: {selectedIssues.length + (search ? 1 : 0)}</span>
+            </div>
+        </div>
+
+        {/* Search and Sort Row (Combined Box) */}
+        <div className="mt-6 border border-slate-200 rounded-md overflow-hidden flex flex-col md:flex-row shadow-sm">
+            {/* Search Section */}
+            <div className="flex-1 p-3 flex items-center gap-3 bg-white">
+                <Search className="w-4 h-4 text-primary shrink-0" />
+                <input 
+                    type="text"
+                    placeholder="Search"
+                    className="flex-1 bg-transparent border-none outline-none text-[14px] font-medium text-slate-700 placeholder:text-slate-400"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+                <ListFilter className="w-4 h-4 text-primary cursor-pointer shrink-0" />
+            </div>
+
+            {/* Vertical Split Line (Dotted) */}
+            <div className="hidden md:block w-px border-l border-dotted border-slate-300"></div>
+
+            {/* Sort Section */}
+            <div className="p-3 flex items-center gap-4 bg-white md:min-w-[300px]">
+                <span className="text-[14px] font-bold text-primary ml-2">Sort by:</span>
+                <div className="flex items-center gap-2">
+                    <button 
+                        onClick={() => setSortBy(sortBy === 'patient_name' ? 'patient_id' : 'patient_name')}
+                        className="px-3 py-1.5 border border-slate-200 rounded text-[12px] font-medium text-slate-600 flex items-center gap-2 hover:bg-slate-50 transition-all min-w-[100px] justify-between"
+                    >
+                        {sortBy === 'patient_name' ? 'option 1' : 'ID'}
+                        <span className="text-[10px]">&uarr;&darr;</span>
+                    </button>
+                    <button 
+                        onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
+                        className="px-3 py-1.5 border border-slate-200 rounded text-[12px] font-medium text-slate-600 flex items-center gap-2 hover:bg-slate-50 transition-all min-w-[100px] justify-between"
+                    >
+                        {order === 'asc' ? 'option 1' : 'option 1'}
+                        <span className="text-[10px]">&uarr;&darr;</span>
+                    </button>
                 </div>
             </div>
         </div>
 
-        {/* Filter Controls */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 mb-6">
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="relative flex-1 group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
-              <input 
-                type="text"
-                placeholder="Search by name or ID..."
-                className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            
-            <div className="flex items-center gap-3">
-               <span className="text-sm font-bold text-slate-400 mr-2">Sort by:</span>
-               <select 
-                 className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-600 focus:outline-none transition-all cursor-pointer"
-                 value={sortBy}
-                 onChange={(e) => setSortBy(e.target.value)}
-               >
-                 <option value="patient_name">Name</option>
-                 <option value="patient_id">ID</option>
-                 <option value="age">Age</option>
-               </select>
-               <button 
-                 onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
-                 className="p-3 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition-all text-slate-500"
-               >
-                 <ArrowUpDown className="w-4 h-4" />
-               </button>
-               <button className="flex items-center gap-2 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all">
-                  PDF <Download className="w-4 h-4" />
-               </button>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {MEDICAL_ISSUES.map(issue => (
-              <button
-                key={issue}
-                onClick={() => toggleIssue(issue)}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold border transition-all ${
-                  selectedIssues.includes(issue) 
-                  ? 'bg-primary border-primary text-white shadow-md' 
-                  : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'
-                }`}
-              >
-                {issue}
-                {selectedIssues.includes(issue) && <X className="w-3 h-3" />}
-              </button>
+        {/* Filter Buttons Container */}
+        <div className="mt-4 flex flex-wrap gap-3">
+            {MEDICAL_ISSUES.slice(0, 4).map(issue => (
+                <div 
+                    key={issue} 
+                    onClick={() => toggleIssue(issue)}
+                    className={`flex items-center gap-2 px-3 py-2 border rounded text-[13px] font-medium shadow-sm cursor-pointer transition-all ${selectedIssues.includes(issue) ? 'bg-primary/5 border-primary text-primary' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+                >
+                    {issue}
+                    <X className={`w-3 h-3 ${selectedIssues.includes(issue) ? 'text-primary' : 'text-slate-400'}`} />
+                </div>
             ))}
-            {selectedIssues.length > 0 && (
-              <button 
-                onClick={clearFilters}
-                className="text-xs font-bold text-primary hover:underline px-2"
-              >
-                Clear All
-              </button>
-            )}
-          </div>
+        </div>
+
+        {/* PDF Button */}
+        <div className="mt-6 flex justify-end">
+            <button className="flex items-center gap-2 px-4 py-1.5 bg-white border border-slate-200 rounded text-[12px] font-medium text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
+                PDF <Download className="w-4 h-4 text-slate-400" />
+            </button>
         </div>
 
         {/* List Content */}
-        {viewMode === 'table' ? (
-          <PatientTable patients={patients} loading={loading} />
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {loading ? (
-               Array.from({ length: 12 }).map((_, i) => (
-                 <div key={i} className="bg-white rounded-xl h-64 animate-pulse border border-slate-100"></div>
-               ))
-            ) : patients.map(p => (
-              <PatientCard key={p.patient_id} patient={p} />
-            ))}
-          </div>
-        )}
+        <div className="mt-8">
+            {viewMode === 'table' ? (
+              <PatientTable patients={patients} loading={loading} />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {loading ? (
+                   Array.from({ length: 12 }).map((_, i) => (
+                     <div key={i} className="bg-white rounded-xl h-64 animate-pulse border border-slate-100"></div>
+                   ))
+                ) : patients.map(p => (
+                  <PatientCard key={p.patient_id} patient={p} />
+                ))}
+              </div>
+            )}
+        </div>
 
-        {/* Pagination */}
-        <div className="mt-12 flex justify-center">
-          <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-100 shadow-sm">
+        {/* Pagination - Polished to match design */}
+        <div className="mt-16 mb-20 flex justify-center">
+          <div className="flex items-center gap-4">
             <button 
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
-              className="p-2 rounded-lg hover:bg-slate-50 disabled:opacity-30 disabled:hover:bg-transparent text-slate-500 transition-colors"
+              className="px-3 py-1.5 border border-slate-200 rounded flex items-center gap-2 text-[12px] font-medium text-slate-500 hover:bg-slate-50 disabled:opacity-40 transition-all bg-white"
             >
-              <ChevronLeft className="w-5 h-5" />
+              &lt; Previous
             </button>
             
-            <div className="flex items-center gap-1 px-4">
-               {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
-                 let pageNum;
-                 if (totalPages <= 5) {
-                   pageNum = i + 1;
-                 } else if (page <= 3) {
-                   pageNum = i + 1;
-                 } else if (page >= totalPages - 2) {
-                   pageNum = totalPages - 4 + i;
-                 } else {
-                   pageNum = page - 2 + i;
-                 }
-                 
+            <div className="flex items-center gap-2">
+               {totalPages > 1 && Array.from({ length: Math.min(7, totalPages) }).map((_, i) => {
+                 const pageNum = i + 1;
                  return (
                    <button
                      key={pageNum}
                      onClick={() => setPage(pageNum)}
-                     className={`w-9 h-9 rounded-lg text-sm font-bold transition-all ${page === pageNum ? 'bg-primary text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'}`}
+                     className={`w-7 h-7 rounded text-[12px] font-bold transition-all ${page === pageNum ? 'bg-primary text-white' : 'text-slate-400 hover:text-slate-600'}`}
                    >
                      {String(pageNum).padStart(2, '0')}
                    </button>
@@ -227,9 +212,9 @@ export default function PatientDirectory() {
             <button 
               disabled={page === totalPages}
               onClick={() => setPage(page + 1)}
-              className="p-2 rounded-lg hover:bg-slate-50 disabled:opacity-30 disabled:hover:bg-transparent text-slate-500 transition-colors"
+              className="px-3 py-1.5 border border-slate-200 rounded flex items-center gap-2 text-[12px] font-medium text-slate-500 hover:bg-slate-50 disabled:opacity-40 transition-all bg-white"
             >
-              <ChevronRight className="w-5 h-5" />
+              Next &gt;
             </button>
           </div>
         </div>
