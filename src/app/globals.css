@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8fafc;
+  --foreground: #1e293b;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom Utilities */
+.header-pattern {
+  background-color: #2563eb;
+  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.15) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.card-shadow {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+}
+
+.badge {
+  @apply px-2 py-0.5 rounded-full text-xs font-semibold;
+}
+
+.badge-fever { @apply bg-red-100 text-red-700; }
+.badge-headache { @apply bg-orange-100 text-orange-700; }
+.badge-sore-throat { @apply bg-yellow-100 text-yellow-700; }
+.badge-sprained-ankle { @apply bg-green-100 text-green-700; }
+.badge-rash { @apply bg-pink-100 text-pink-700; }
+.badge-sinusitis { @apply bg-purple-100 text-purple-700; }
+.badge-ear-infection { @apply bg-cyan-100 text-cyan-700; }
+.badge-broken-arm { @apply bg-slate-100 text-slate-700; }
+.badge-stomach-ache { @apply bg-indigo-100 text-indigo-700; }
+.badge-allergic-reaction { @apply bg-amber-100 text-amber-700; }
